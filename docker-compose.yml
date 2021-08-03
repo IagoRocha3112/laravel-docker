@@ -1,12 +1,12 @@
 version: '3'
 
 networks: 
-  correa-service:
+  laravel:
 
 services:
   nginx:
     image: nginx:stable-alpine
-    container_name: nginx-correa-service
+    container_name: nginx-laravel
     ports:
       - "8088:80"
     volumes:
@@ -16,12 +16,12 @@ services:
       - app
       - mysql
     networks: 
-      - correa-service
+      - laravel
   
 
   mysql:
     image: mysql:5.7.22
-    container_name: mysql-correa-service
+    container_name: mysql-laravel
     restart: unless-stopped
     tty: true
     ports:
@@ -36,7 +36,7 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     networks: 
-      - correa-service
+      - laravel
 
   app:
     build:
@@ -45,10 +45,10 @@ services:
         uid: 1000
       context: .
       dockerfile: Dockerfile
-    container_name: correa-service
+    container_name: laravel
     volumes:
       - ./src:/var/www/html
     ports:
       - "9000:9000"
     networks: 
-      - correa-service
+      - laravel
